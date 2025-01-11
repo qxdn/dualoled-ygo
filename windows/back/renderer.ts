@@ -1,2 +1,1 @@
-
-alert("Hello, world! 2");
+import './app'

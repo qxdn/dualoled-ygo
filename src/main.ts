@@ -1,11 +1,15 @@
-import { app, BrowserWindow } from 'electron';
-import path from 'path';
-import started from 'electron-squirrel-startup';
+import { app, BrowserWindow, Display, screen } from "electron";
+import path from "path";
+import started from "electron-squirrel-startup";
 
 declare const FRONT_VITE_DEV_SERVER_URL: string;
 declare const FRONT_VITE_NAME: string;
 declare const BACK_VITE_DEV_SERVER_URL: string;
 declare const BACK_VITE_NAME: string;
+
+const DEBUG = false;
+const WIDTH = 1394
+const HEIGHT = 2031
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -13,66 +17,88 @@ if (started) {
   app.quit();
 }
 
-const createWindow = () => {
+const createWindow = (display: Display,debug=false) => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: WIDTH,
+    height: HEIGHT,
+    x: display.bounds.x,
+    y: display.bounds.y,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, "preload.js"),
     },
+    frame: false,
+    fullscreen: !debug
   });
 
   // and load the index.html of the app.
   if (FRONT_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(FRONT_VITE_DEV_SERVER_URL);
   } else {
-    mainWindow.loadFile(path.join(__dirname, `../renderer/${FRONT_VITE_NAME}/index.html`));
+    mainWindow.loadFile(
+      path.join(__dirname, `../renderer/${FRONT_VITE_NAME}/index.html`)
+    );
   }
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  if (debug) {
+    mainWindow.webContents.openDevTools();
+  }
+
 };
 
-const createSecondWindow = () => {
+// 副屏
+const createSecondWindow = (display: Display,debug=false) => {
+  if (!display) {
+    return;
+  }
   const secondWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: WIDTH,
+    height: HEIGHT,
+    x: display.bounds.x,
+    y: display.bounds.y,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, "preload.js"),
+      devTools: debug,
     },
-  })
+    frame: false,
+    fullscreen: !debug
+  });
 
   if (BACK_VITE_DEV_SERVER_URL) {
     secondWindow.loadURL(BACK_VITE_DEV_SERVER_URL);
   } else {
-    secondWindow.loadFile(path.join(__dirname, `../renderer/${BACK_VITE_NAME}/index.html`));
+    secondWindow.loadFile(
+      path.join(__dirname, `../renderer/${BACK_VITE_NAME}/index.html`)
+    );
   }
 
-  secondWindow.webContents.openDevTools();
-}
+  if (debug) {
+    secondWindow.webContents.openDevTools();
+  }
 
+};
 
 const init = () => {
-  createWindow();
-  createSecondWindow();
-}
+  const displays: Display[] = screen.getAllDisplays();
+  createWindow(displays[1],DEBUG);
+  createSecondWindow(displays[0],DEBUG);
+};
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', init);
+app.on("ready", init);
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });
 
-app.on('activate', () => {
+app.on("activate", () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
