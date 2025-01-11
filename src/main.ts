@@ -10,6 +10,7 @@ declare const BACK_VITE_NAME: string;
 const DEBUG = false;
 const WIDTH = 1394
 const HEIGHT = 2031
+const RADIO = WIDTH / HEIGHT
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -17,18 +18,32 @@ if (started) {
   app.quit();
 }
 
+const computeWH = (width: number, height: number) => {
+  if (width < height) {
+    return {
+      width: width,
+      height: width / RADIO
+    }
+  }
+  return {
+    width: height * RADIO,
+    height: height
+  }
+}
+
 const createWindow = (display: Display,debug=false) => {
+  const { width, height } = computeWH(display.bounds.width, display.bounds.height)
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: WIDTH,
-    height: HEIGHT,
+    width: width,
+    height: height,
     x: display.bounds.x,
     y: display.bounds.y,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
     frame: false,
-    fullscreen: !debug
+    //fullscreen: !debug
   });
 
   // and load the index.html of the app.
@@ -51,9 +66,10 @@ const createSecondWindow = (display: Display,debug=false) => {
   if (!display) {
     return;
   }
+  const { width, height } = computeWH(display.bounds.width, display.bounds.height)
   const secondWindow = new BrowserWindow({
-    width: WIDTH,
-    height: HEIGHT,
+    width: width,
+    height: height,
     x: display.bounds.x,
     y: display.bounds.y,
     webPreferences: {
@@ -61,7 +77,7 @@ const createSecondWindow = (display: Display,debug=false) => {
       devTools: debug,
     },
     frame: false,
-    fullscreen: !debug
+    //fullscreen: !debug
   });
 
   if (BACK_VITE_DEV_SERVER_URL) {
