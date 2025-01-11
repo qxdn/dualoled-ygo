@@ -2,6 +2,12 @@ import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import started from 'electron-squirrel-startup';
 
+declare const FRONT_VITE_DEV_SERVER_URL: string;
+declare const FRONT_VITE_NAME: string;
+declare const BACK_VITE_DEV_SERVER_URL: string;
+declare const BACK_VITE_NAME: string;
+
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
   app.quit();
@@ -18,20 +24,44 @@ const createWindow = () => {
   });
 
   // and load the index.html of the app.
-  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+  if (FRONT_VITE_DEV_SERVER_URL) {
+    mainWindow.loadURL(FRONT_VITE_DEV_SERVER_URL);
   } else {
-    mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+    mainWindow.loadFile(path.join(__dirname, `../renderer/${FRONT_VITE_NAME}/index.html`));
   }
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 };
 
+const createSecondWindow = () => {
+  const secondWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+    },
+  })
+
+  if (BACK_VITE_DEV_SERVER_URL) {
+    secondWindow.loadURL(BACK_VITE_DEV_SERVER_URL);
+  } else {
+    secondWindow.loadFile(path.join(__dirname, `../renderer/${BACK_VITE_NAME}/index.html`));
+  }
+
+  secondWindow.webContents.openDevTools();
+}
+
+
+const init = () => {
+  createWindow();
+  createSecondWindow();
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', init);
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -46,7 +76,7 @@ app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
+    init();
   }
 });
 
