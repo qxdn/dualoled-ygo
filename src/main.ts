@@ -7,7 +7,7 @@ declare const FRONT_VITE_NAME: string;
 declare const BACK_VITE_DEV_SERVER_URL: string;
 declare const BACK_VITE_NAME: string;
 
-const DEBUG = false;
+const DEBUG = true;
 const WIDTH = 1394;
 const HEIGHT = 2031;
 const RADIO = WIDTH / HEIGHT;
@@ -93,7 +93,7 @@ const init = () => {
       bfm.push(display);
     }
   });
-  createWindow(bfm[0], DEBUG);
+  createWindow(bfm.length >= 1 ? bfm[0] : screen.getPrimaryDisplay(), DEBUG);
   createSecondWindow(
     bfm.length >= 2 ? bfm[1] : screen.getPrimaryDisplay(),
     DEBUG

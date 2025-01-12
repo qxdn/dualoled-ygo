@@ -5,3 +5,25 @@
   top: 0;
   left: 0;
 }
+
+.protector {
+  animation: fadeChange 10s infinite;
+}
+
+@keyframes fadeChange {
+  0% {
+    background-image: url("./assets/SSA-Protector0.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  50% {
+    background-image: url("./assets/SSA-Protector1.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  100% {
+    background-image: url("./assets/SSA-Protector0.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+}
