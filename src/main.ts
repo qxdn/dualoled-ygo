@@ -8,10 +8,9 @@ declare const BACK_VITE_DEV_SERVER_URL: string;
 declare const BACK_VITE_NAME: string;
 
 const DEBUG = false;
-const WIDTH = 1394
-const HEIGHT = 2031
-const RADIO = WIDTH / HEIGHT
-
+const WIDTH = 1394;
+const HEIGHT = 2031;
+const RADIO = WIDTH / HEIGHT;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -22,28 +21,25 @@ const computeWH = (width: number, height: number) => {
   if (width < height) {
     return {
       width: width,
-      height: width / RADIO
-    }
+      height: width / RADIO,
+    };
   }
   return {
     width: height * RADIO,
-    height: height
-  }
-}
+    height: height,
+  };
+};
 
-const createWindow = (display: Display,debug=false) => {
-  const { width, height } = computeWH(display.bounds.width, display.bounds.height)
+const createWindow = (display: Display, debug = false) => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: width,
-    height: height,
     x: display.bounds.x,
     y: display.bounds.y,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
     frame: false,
-    //fullscreen: !debug
+    fullscreen: !debug,
   });
 
   // and load the index.html of the app.
@@ -58,18 +54,14 @@ const createWindow = (display: Display,debug=false) => {
   if (debug) {
     mainWindow.webContents.openDevTools();
   }
-
 };
 
 // 副屏
-const createSecondWindow = (display: Display,debug=false) => {
+const createSecondWindow = (display: Display, debug = false) => {
   if (!display) {
     return;
   }
-  const { width, height } = computeWH(display.bounds.width, display.bounds.height)
   const secondWindow = new BrowserWindow({
-    width: width,
-    height: height,
     x: display.bounds.x,
     y: display.bounds.y,
     webPreferences: {
@@ -77,7 +69,7 @@ const createSecondWindow = (display: Display,debug=false) => {
       devTools: debug,
     },
     frame: false,
-    //fullscreen: !debug
+    fullscreen: !debug,
   });
 
   if (BACK_VITE_DEV_SERVER_URL) {
@@ -91,13 +83,21 @@ const createSecondWindow = (display: Display,debug=false) => {
   if (debug) {
     secondWindow.webContents.openDevTools();
   }
-
 };
 
 const init = () => {
   const displays: Display[] = screen.getAllDisplays();
-  createWindow(displays[1],DEBUG);
-  createSecondWindow(displays[0],DEBUG);
+  const bfm: Display[] = [];
+  displays.forEach((display) => {
+    if (display.label.includes("BF060YKM")) {
+      bfm.push(display);
+    }
+  });
+  createWindow(bfm[0], DEBUG);
+  createSecondWindow(
+    bfm.length >= 2 ? bfm[1] : screen.getPrimaryDisplay(),
+    DEBUG
+  );
 };
 
 // This method will be called when Electron has finished
