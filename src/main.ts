@@ -8,6 +8,7 @@ declare const BACK_VITE_DEV_SERVER_URL: string;
 declare const BACK_VITE_NAME: string;
 
 const DEBUG = true;
+const FRAME = true
 const WIDTH = 1394;
 const HEIGHT = 2031;
 const RADIO = WIDTH / HEIGHT;
@@ -38,7 +39,7 @@ const createWindow = (display: Display, debug = false) => {
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
-    frame: false,
+    frame: FRAME,
     fullscreen: !debug,
   });
 
@@ -68,7 +69,7 @@ const createSecondWindow = (display: Display, debug = false) => {
       preload: path.join(__dirname, "preload.js"),
       devTools: debug,
     },
-    frame: false,
+    frame: FRAME,
     fullscreen: !debug,
   });
 
