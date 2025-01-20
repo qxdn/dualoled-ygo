@@ -14,8 +14,6 @@
   --vio: #c929f1;
   --mx: 50%;
   --my: 50%;
-  --tx: 0px;
-  --ty: 0px;
   --s: 1;
   --o: 1;
   --rx: 0deg;
@@ -27,7 +25,7 @@
   --bars: 24px;
   --bar-color: rgba(255, 255, 255, 0.6);
   --bar-bg: rgb(10, 10, 10);
-  --radius: 4.55% / 3.5%;
+  --aspect-ratio: 0.714;
 }
 .cardShinePlusAfterElement {
   --space: 5%;
@@ -35,8 +33,7 @@
   --imgsize: 50%;
 
   animation: shine 10s infinite;
-  width: 330px;
-  aspect-ratio: 0.714;
+  aspect-ratio: var(--aspect-ratio);
   border-radius: var(--radius);
   mix-blend-mode: color-dodge;
   background-image: url(https://res.cloudinary.com/simey/image/upload/Dev/PokemonCards/illusion.webp),
@@ -87,8 +84,7 @@
   --imgsize: 50%;
 
   animation: shine 10s infinite;
-  width: 330px;
-  aspect-ratio: 0.714;
+  aspect-ratio: var(--aspect-ratio);
   border-radius: var(--radius);
   mix-blend-mode: exclusion;
   background-image: url(https://res.cloudinary.com/simey/image/upload/Dev/PokemonCards/illusion.webp),
