@@ -7,8 +7,8 @@ declare const FRONT_VITE_NAME: string;
 declare const BACK_VITE_DEV_SERVER_URL: string;
 declare const BACK_VITE_NAME: string;
 
-const DEBUG = true;
-const FRAME = true
+const DEBUG = false;
+const FRAME = false
 const WIDTH = 1394;
 const HEIGHT = 2031;
 const RADIO = WIDTH / HEIGHT;
