@@ -2,4 +2,4 @@
 
 借助柔性屏来实现一张游戏王卡片，是原本手办卡的劣化版本。特效的实现参考了宝可梦卡片。
 
-<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=113873390736394&bvid=BV1ZkfaY6EwR&cid=28022277894&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+[![](https://i1.hdslb.com/bfs/archive/0d0ece334cf4b485cc877b3540d908198df4307b.jpg)](https://www.bilibili.com/video/BV1ZkfaY6EwR)
